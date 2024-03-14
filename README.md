@@ -1,1 +1,1 @@
-test
+尚未完成V1，详情见README_CN.md
