@@ -1,0 +1,21 @@
+Transaction {
+    hash: 0x050527efb0ba6617c138e2f6fcf245a9e859e0364210a6a048366a4e7e1dd1f5,
+    nonce: 663862, 
+    block_hash: None, 
+    block_number: None, 
+    transaction_index: None, 
+    from: Some(0x7c195d981abfdc3ddecd2ca0fed0958430488e34), 
+    to: Some(0xd3d8f467ac971236b3002959b0711e35c13a3b9e), 
+    value: 19860390000000000, 
+    gas_price: Some(48000000000), 
+    gas: 21000, 
+    input: Bytes("0x"), 
+    v: Some(1), 
+    r: Some(73874207809505052294790607460197461843739241448373842056090747876184781471101), 
+    s: Some(29248542759880436423509254834158863762605705015716594256653552007184894166790), 
+    raw: None, 
+    transaction_type: Some(2), 
+    access_list: Some([]), 
+    max_fee_per_gas: Some(48000000000), 
+    max_priority_fee_per_gas: Some(2000000000) 
+}

@@ -1,34 +1,53 @@
-// #![allow(non_snake_case)] 等其他模块写好之后，再填上这个。main函数不写逻辑，写到其他模块
 use web3::{
-    futures::TryStreamExt, 
-    transports::WebSocket, 
-    types::TransactionId
+    futures::StreamExt, 
+    types::{TransactionId,H256,H160}
+};
+use std::{
+    env, future,
 };
 use dotenv::dotenv;
-use std::env;
+use std::sync::mpsc;
+use std::str::FromStr;
 
-pub async fn listen_mem() -> web3::Result {
+// The producer consumer model, as consumers need to retrieve on chain data again, 
+// the longer it runs, the higher the latency of consumers
+pub async fn listen_analysis_all() -> web3::Result {
     dotenv().ok();
     let wss_url = env::var("WSS").expect("Init the .env file first");
 
-    println!("init websocket");
-    let wss_node_endpoint = wss_url.to_string();
-    let sub_transport = WebSocket::new(wss_node_endpoint.as_str()).await?;
-    let web3 = web3::Web3::new(sub_transport);
-    println!("init websocket successfully");
-    
-    println!("start listenning to mempool");
-    let mut pending_transactions = web3.eth_subscribe().subscribe_new_pending_transactions().await?;
-    
-    while let Some(pending_transaction_hash) = pending_transactions.try_next().await? {
-        let pth = TransactionId::from(pending_transaction_hash);
+    let ws = web3::transports::WebSocket::new(wss_url.as_str()).await?;
+    let web3 = web3::Web3::new(ws.clone());
+    let sub = web3
+        .eth_subscribe()
+        .subscribe_new_pending_transactions()
+        .await?;
 
-        let res = web3.eth().transaction(pth).await;
+    let (sender, receiver): (mpsc::Sender<Result<H256,_>>, mpsc::Receiver<Result<H256,_>>) = mpsc::channel();
+
+    tokio::spawn(async move {
+        sub.for_each(|hash| {
+            sender.send(hash).unwrap();
+            future::ready(())
+        }).await;
+    });
+
+    while let Ok(hash) = receiver.recv() {
+        println!("hash:{:?}", hash);
+
+        let tx = TransactionId::from(hash.unwrap());
+
+        let res = web3.eth().transaction(tx).await;
         match res {
             Ok(opt_txn) => {
                 match opt_txn {
                     None => println!("could not find transaction for now\n"),
-                    Some(txn) => println!("{:?}\n", txn)
+                    Some(txn) => {
+                        // Binance hot wallet for example
+                        let target_address = H160::from_str("0x28C6c06298d514Db089934071355E5743bf21d60").unwrap();
+                        if txn.from == Some(target_address){
+                            println!("details: {:?}\n", txn);
+                        }
+                    }
                 }
             }
             Err(e) => println!("{:?}\n", e)
@@ -37,4 +56,3 @@ pub async fn listen_mem() -> web3::Result {
 
     Ok(())
 }
-

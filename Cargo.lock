@@ -7,6 +7,7 @@ name = "EVM-MemPool"
 version = "0.1.0"
 dependencies = [
  "dotenv",
+ "text-to-ascii-art",
  "tokio",
  "web3",
 ]
@@ -1459,6 +1460,12 @@ dependencies = [
  "rustix",
  "windows-sys 0.52.0",
 ]
+
+[[package]]
+name = "text-to-ascii-art"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fff85e7ccbae668e075f262a80e7315b399cb07fb5dc7ae1cd7261c80d007976"
 
 [[package]]
 name = "thiserror"
