@@ -6,7 +6,7 @@ mod execute;
 mod tools;
 
 #[tokio::main]
-async fn main() -> web3::Result {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match convert("EVM MemPool".to_string()) {
         Ok(string) => println!("{}", string),
         Err(err) => println!("Error: {}", err),
