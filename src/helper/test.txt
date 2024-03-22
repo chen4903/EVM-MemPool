@@ -1,1 +1,25 @@
-test
+Hacker
+
+0x096f0f03e4be68d7e6dd39b22a3846b8ce9849a3   GHT                 Lost: ~57K
+0xe000008459b74a91e306a47c808061dfa372000e   CompoundUni         Lost: ~439,537
+0xc0ffeebabe5d496b2dde509f9fa189c25cf29671   BlueberryProtocol   Lost: ~1,400,000  (whitehat)
+0xd215ffaf0f85fb6f93f11e49bd6175ad58af0dfd   DeezNutz 404        Lost: ~170k
+0x0000000f95c09138dfea7d9bcf3478fc2e13dcab   GAIN                Lost: ~6.4 ETH
+0x9733303117504c146a4e22261f2685ddb79780ef   RuggedArt           Lost: ~10k
+0x2c903f97ea69b393ea03e7fab8d64d722b3f5559   ParticleTrade       Lost: ~50k
+0x09f6be2a7d0d2789f01ddfaf04d4eaa94efc0857   AffineDeFi          Lost: ~88K
+0x7b3a6eff1c9925e509c2b01a389238c1fcc462b6   BarleyFinance       Lost: ~130K 
+0x63136677355840f26c0695dd6de5c9e4f514f8e8   BmiZapper           Lost: ~114K
+0x50DF5a2217588772471B84aDBbe4194A2Ed39066   SocketGateway       Lost: ~3.3Million
+0xb90cf1d740b206b6d80854bc525e609dc42b45dc   WiseLending         Lost: ~464K
+
+Dex
+
+Binance   0x28c6c06298d514db089934071355e5743bf21d60
+Coinbase  0x7c195D981AbFdC3DDecd2ca0Fed0958430488e34
+Bybit     0x1Db92e2EeBC8E0c075a02BeA49a2935BcD2dFCF4
+OKX       0xBf94F0AC752C739F623C463b5210a7fb2cbb420B
+Kraken    0x267be1C1D684F78cb4F6a176C4911b741E4Ffdc0
+Gate.io   0x0D0707963952f2fBA59dD06f2b425ace40b492Fe
+KuCoin    0xcaD621da75a66c7A8f4FF86D30A2bF981Bfc8FdD
+Bitfinex  0x8103683202aa8DA10536036EDef04CDd865C225E
