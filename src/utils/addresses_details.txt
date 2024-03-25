@@ -96,3 +96,5 @@ compound v3
 0x508031a5840D8B7550D1c5dC91e13660e3D8dA74  SpillWays 1000 USDC
 
 0xece3820c8781374aa0f6a4868baf749c523d7f46  MixETH
+
+【以上的内容均已添加至addresses_details.txt，后续添加请同时在本文件和addresses_details.txt中添加】

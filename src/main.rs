@@ -1,24 +1,27 @@
 #![allow(non_snake_case)]
+#![allow(unused_variables)]
 use text_to_ascii_art::convert;
 mod execute;
 mod listener;
-mod tools;
+mod utils;
+use std::env;
+use dotenv::dotenv;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv().ok();
+    let api_key = env::var("ETHERSCAN_API_KEY").expect("Init the .env file first");
+    // let wss_url = env::var("WSS_RPC").expect("Init the .env file first");
+
     match convert("EVM MemPool".to_string()) {
         Ok(string) => println!("{}", string),
         Err(err) => println!("Error: {}", err),
     }
-    println!("|||||||||||||||||||||||||||||");
-    println!(" GetAddressTransaction Test");
-    println!("|||||||||||||||||||||||||||||");
-    let addr = "0xbE4bf446e2Bdd6ebaD529A4df21911c87E48E535";
-    listener::get_transaction_by_address::fetch_transactions(addr, 0, 99999999).await?;
 
-    println!("|||||||||||||||||||||||||||||");
-    println!(" Memory Pool Listen Test");
-    println!("|||||||||||||||||||||||||||||");
-    let _ = listener::listen::listen_analysis_all().await;
+    // listener::listen::fetch_address_normal_txs(api_key.clone(),"0x0A30ccEda7f03B971175e520c0Be7E6728860b67", 0, 99999999999999).await?;
+    // listener::listen::fetch_address_internal_txs(api_key.clone(),"0x0A30ccEda7f03B971175e520c0Be7E6728860b67", 0, 99999999999999).await?;
+    // listener::listen::fetch_address_all_txs(api_key.clone(),"0x0A30ccEda7f03B971175e520c0Be7E6728860b67", 0, 99999999999999).await?;
+
+    // let _ = listener::listen::listen_analysis_all_pool(wss_url).await;
     Ok(())
 }
