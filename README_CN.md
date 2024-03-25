@@ -27,14 +27,14 @@
 
 ### listener
 
-- `listen_analysis_all_pool()`：实时获取mempool池子的所有hash，并且解析hash，还存在问题
+- `listen_analysis_all_pool()`：实时获取mempool池子的所有hash，并且解析hash。TODO【还存在问题】
 - `fetch_address_all_txs`()：获得某个地址的所有交易，包括普通交易、内部交易
 - `fetch_address_normal_txs()`：获得某个地址的普通交易
 - `fetch_address_internal_txs()`：获得某个地址的内部交易
 
 ### utils
 
-- 
+- `get_contract_solidity_code()`：获取某个已经verify的合约的solidity源码，默认输出到项目根路径下的output文件夹。TODO【这种[分页](https://etherscan.io/address/0x80d69e79258FE9D056c822461c4eb0B4ca8802E2#code)的合约尚未完成，拉下来需要进一步分开。像这种[单页](https://etherscan.io/address/0xB20bd5D04BE54f870D5C0d3cA85d82b34B836405#code)的可以正常拉取下来】
 
 
 
