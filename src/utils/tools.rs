@@ -1,8 +1,25 @@
 #![allow(dead_code)]
-use std::fs::File;
-use std::io::Write;
-use std::fs;
+use std::{
+    fs::File,
+    io::BufReader,
+    io::Write,
+    fs
+};
 use reqwest::get;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+struct EthData {
+    hacker: Vec<String>,
+    protocol: Vec<String>,
+    mixing_service: Vec<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct JsonData {
+    eth: EthData,
+}
+
 
 /// @dev：
 ///     TODO：这种分页的合约尚未完成，拉下来需要进一步分开：https://etherscan.io/address/0x80d69e79258FE9D056c822461c4eb0B4ca8802E2#code
@@ -85,5 +102,20 @@ fn write_file(file_name: String, output: String) {
     match file.write_all(output.replace("\r\n", "\n").as_bytes()) {
         Ok(_) => {},
         Err(e) => eprintln!("write file errer: {}", e),
+    }
+}
+
+pub fn get_db_address(option: u32) -> Vec<String>{
+    let file = File::open("src/utils/addresses.json").expect("Failed to open file");
+    let reader = BufReader::new(file);
+
+    let json_data: JsonData = serde_json::from_reader(reader).expect("Failed to parse JSON");
+
+    if option == 0 {
+        return json_data.eth.hacker;
+    }else if option == 1 {
+        return json_data.eth.protocol;
+    } else {
+        return json_data.eth.mixing_service;
     }
 }

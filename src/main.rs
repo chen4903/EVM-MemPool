@@ -24,5 +24,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // let _ = listener::listen::listen_analysis_all_pool(wss_url).await;
     // utils::tools::get_contract_solidity_code(api_key, "0xB20bd5D04BE54f870D5C0d3cA85d82b34B836405").await?;
+    let is_invoke = listener::listen::is_invoke_mixing_service(api_key.clone(),"0x0A30ccEda7f03B971175e520c0Be7E6728860b67", 0, 99999999999999).await?;
+    println!("是否有混币器相关交易:{}", is_invoke);
     Ok(())
 }
