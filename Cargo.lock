@@ -3,7 +3,17 @@
 version = 3
 
 [[package]]
-name = "EVM-MemPool"
+name = "Inflector"
+version = "0.11.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
+dependencies = [
+ "lazy_static",
+ "regex",
+]
+
+[[package]]
+name = "SecHelper"
 version = "0.1.0"
 dependencies = [
  "dotenv",
@@ -13,16 +23,6 @@ dependencies = [
  "serde_json",
  "text-to-ascii-art",
  "tokio",
-]
-
-[[package]]
-name = "Inflector"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
-dependencies = [
- "lazy_static",
- "regex",
 ]
 
 [[package]]

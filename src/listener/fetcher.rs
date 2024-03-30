@@ -1,12 +1,5 @@
 #![allow(dead_code)]
-use ethers::core::types::H160;
-use ethers::providers::{Middleware, Provider, StreamExt, Ws};
-use std::{
-    future,
-    sync::{mpsc, Arc},
-    error::Error,
-    ops::Deref
-};
+use std::error::Error;
 use reqwest::get;
 use serde::{Deserialize, Serialize};
 use crate::utils::tools;
@@ -20,58 +13,6 @@ pub struct TransactionInfo {
     to: String,
     value: String,
     input: String
-}
-
-/// @dev：
-///     TODO：还存在问题
-///     实时获取mempool池子的所有hash，并且解析hash
-/// @param：
-///     wss_url：WSS提供商的RPC
-pub async fn listen_analysis_all_pool(wss_url: String) -> Result<(), Box<dyn std::error::Error>> {
-
-    let provider = Arc::new(Provider::<Ws>::connect(wss_url).await.unwrap());
-
-    let (sender, receiver) = mpsc::channel();
-
-    let provider_clone = Arc::clone(&provider);
-    tokio::spawn(async move {
-        provider_clone
-            .deref()
-            .subscribe_pending_txs()
-            .await
-            .unwrap()
-            .for_each(|tx_hash| {
-                sender.send(tx_hash).unwrap();
-                future::ready(())
-            })
-            .await;
-    });
-
-    // producer:comsumer = 1:1
-    // TODO: producer:comsumer = 1:n
-    while let Ok(tx_hash) = receiver.recv() {
-        println!("{:?}", tx_hash);
-        if let Ok(receipt) = provider.get_transaction(tx_hash).await {
-            let target_address: H160 = "0x28C6c06298d514Db089934071355E5743bf21d60"
-                .parse()
-                .unwrap(); // e.g. Binance hot wallet
-            match receipt {
-                None => println!("could not find transaction for now"),
-                Some(txn) => {
-                    if txn.clone().from == target_address {
-                        println!("details: {:?}", txn);
-                    }
-                }
-            }
-        } else {
-            println!(
-                "Failed to fetch transaction receipt for hash: {:?}",
-                tx_hash
-            );
-        }
-    }
-
-    Ok(())
 }
 
 /// @dev：

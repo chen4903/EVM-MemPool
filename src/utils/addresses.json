@@ -1,6 +1,6 @@
 {
     "eth": {
-        "hacker": ["321312"],
+        "hacker": ["Halo"],
         "protocol": [
             "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", 
             "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
@@ -82,7 +82,8 @@
             "0xd533429d9D00aa2165F73524e43172aefDea5219",
             "0x508031a5840D8B7550D1c5dC91e13660e3D8dA74",
             "0xece3820c8781374aa0f6a4868baf749c523d7f46"
-        ]
+        ],
+        "potential_hacker": ["Halo"]
     },
     "bsc": {
         "hacker": [],
