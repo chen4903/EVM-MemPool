@@ -10,9 +10,9 @@
 - [x] 查询某个地址是否有相关混币器交易
 - [ ] 监控某个合约的交互情况，如果有黑客交互(已经确认交易)，则发邮件通知用户，
   - [ ] 使用订阅的方式实现，也许是用subscribe_logs, subscribe某个合约地址...
-  - [ ] 收集主流合约的地址：比如AAVE、Compound、1Inch等
+  - [x] 收集主流合约的地址：比如AAVE、Compound、1Inch等
   - [x] 收集黑客地址
-  - [ ] 发邮件给用户
+  - [x] 发邮件给用户
 - [ ] 监控混币器发送给用户的地址，这些地址可能是将来用来发起攻击、部署钓鱼合约的地址
   - [ ] 将获取到的地址存放到`addressses._details.json`文件的`potential_hacker`字段
 
@@ -21,8 +21,6 @@
   - [ ] 订阅USDT的转账交易
   - [ ] 如果是转账0U，则是地址投毒
   - [ ] 记录下黑客的地址和被投毒的地址到utils文件夹下面的`addresses_poisoning.json`文件中
-
-
 
 ## Usage
 
@@ -40,6 +38,9 @@
 ### utils
 
 - `get_contract_solidity_code()`：获取某个已经verify的合约的solidity源码，默认输出到项目根路径下的output文件夹。TODO【这种[分页](https://etherscan.io/address/0x80d69e79258FE9D056c822461c4eb0B4ca8802E2#code)的合约尚未完成，拉下来需要进一步分开。像这种[单页](https://etherscan.io/address/0xB20bd5D04BE54f870D5C0d3cA85d82b34B836405#code)的可以正常拉取下来】
+- `send_email()`：发送邮件给用户
 
+### ai
 
+- `openai()`：向ChatGPT咨询安全问题，听取它的安全建议
 

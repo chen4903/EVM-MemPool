@@ -7,6 +7,8 @@ use std::{
 };
 use reqwest::get;
 use serde::{Deserialize, Serialize};
+use lettre::{transport::smtp::authentication::Credentials, Message, SmtpTransport, Transport};
+use std::error::Error;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct EthData {
@@ -118,4 +120,37 @@ pub fn get_db_address(option: u32) -> Vec<String>{
     } else {
         return json_data.eth.mixing_service;
     }
+}
+
+pub fn send_email(
+    sender: String,
+    receiver: String,
+    title: String,
+    content: String,
+    password: String,
+    smtp_server: String
+) -> Result<(), Box<dyn Error>> {
+
+    let email = Message::builder()
+        .from(sender.parse()?)
+        .to(receiver.parse()?)
+        .subject(title)
+        .body(content)?;
+
+    let smtp_server = smtp_server.as_str(); // 根据邮件服务商而定
+    let smtp_username = sender; // 发件邮箱
+    let smtp_password = password; // 授权码
+
+    let creds = Credentials::new(smtp_username.to_string(), smtp_password.to_string());
+
+    let mailer = SmtpTransport::relay(smtp_server)?
+        .credentials(creds)
+        .build();
+
+    match mailer.send(&email) {
+        Ok(_) => println!("Email sent successfully"),
+        Err(e) => eprintln!("Could not send the email: {:?}", e),
+    }
+
+    Ok(())
 }

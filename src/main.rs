@@ -28,7 +28,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // println!("是否有混币器相关交易:{}", is_invoke);
 
     // 测试ChatGPT功能
-    ai::chatgpt::openai().await;
+    // ai::chatgpt::openai().await;
+
+    // 测试监听功能
+    // listener::listen::hello().await;
+
+    // 测试发邮件功能
+    let sender = env::var("SENDER").expect("Init the .env file first");
+    let receiver = env::var("RECEIVER").expect("Init the .env file first");
+    let password = env::var("PASSWORD").expect("Init the .env file first");
+    let smtp_server = env::var("SMTP_SEVER").expect("Init the .env file first");
+    utils::tools::send_email(
+        sender,
+        receiver,
+        String::from("SecHelper robot"),
+        String::from("Your asset maybe in dangerous!"),
+        password,
+        smtp_server
+    ).unwrap();
 
     Ok(())
 }
