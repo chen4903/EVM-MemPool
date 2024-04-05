@@ -12,7 +12,7 @@ use dotenv::dotenv;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     let api_key = env::var("ETHERSCAN_API_KEY").expect("Init the .env file first");
-    // let wss_url = env::var("WSS_RPC").expect("Init the .env file first");
+    let wss_url = env::var("WSS_RPC").expect("Init the .env file first");
 
     match convert("SecHelper".to_string()) {
         Ok(string) => println!("{}", string),
@@ -34,19 +34,48 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // listener::listen::hello().await;
 
     // 测试发邮件功能
-    let sender = env::var("SENDER").expect("Init the .env file first");
-    let receiver = env::var("RECEIVER").expect("Init the .env file first");
-    let password = env::var("PASSWORD").expect("Init the .env file first");
-    let smtp_server = env::var("SMTP_SEVER").expect("Init the .env file first");
-    utils::tools::send_email(
-        sender,
-        receiver,
-        String::from("SecHelper robot"),
-        String::from("Your asset maybe in dangerous!"),
-        password,
-        smtp_server
-    ).unwrap();
+    // let sender = env::var("SENDER").expect("Init the .env file first");
+    // let receiver = env::var("RECEIVER").expect("Init the .env file first");
+    // let password = env::var("PASSWORD").expect("Init the .env file first");
+    // let smtp_server = env::var("SMTP_SEVER").expect("Init the .env file first");
+    // utils::tools::send_email(
+    //     sender,
+    //     receiver,
+    //     String::from("SecHelper robot"),
+    //     String::from("Your asset may be in dangerous!"),
+    //     password,
+    //     smtp_server
+    // ).unwrap();
 
+    // 监听某个地址，发出的事件
+    // listener::listen::subscribe_erc20_transfer(
+    //     wss_url.clone(), 
+    //     "0xdAC17F958D2ee523a2206206994597C13D831ec7".to_string() // USDT
+    // ).await?;
+
+    // 监听某个地址的所有交易动向
+    // listener::listen::subscribe_address(
+    //     api_key,
+    //     wss_url.clone(), 
+    //     "0x28C6c06298d514Db089934071355E5743bf21d60".to_string() // Binance hot wallet 14
+    // ).await?;
+
+    // 监听某个地址, 如果他发出了交易，则发出邮件通知
+    // let sender = env::var("SENDER").expect("Init the .env file first");
+    // let receiver = env::var("RECEIVER").expect("Init the .env file first");
+    // let password = env::var("PASSWORD").expect("Init the .env file first");
+    // let smtp_server = env::var("SMTP_SEVER").expect("Init the .env file first");
+    // execute::guardian::message_rebot(
+    //     api_key,
+    //     wss_url.clone(), 
+    //     "0x28C6c06298d514Db089934071355E5743bf21d60".to_string(), // Binance hot wallet 14
+    //     sender,
+    //     receiver,
+    //     String::from("SecHelper robot"),
+    //     String::from("Binance hot wallet 14 has action!"),
+    //     password,
+    //     smtp_server
+    // ).await?;
+    
     Ok(())
 }
-

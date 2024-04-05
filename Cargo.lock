@@ -19,6 +19,7 @@ dependencies = [
  "colored",
  "dotenv",
  "ethers",
+ "eyre",
  "lettre",
  "mime",
  "openai",
