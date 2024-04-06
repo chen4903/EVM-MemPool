@@ -157,7 +157,7 @@ pub async fn is_invoke_mixing_service(
     let response_normal = get(&url_normal).await?;
     let response_internal = get(&url_internal).await?;
     // 得到混币器列表
-    let addresses = tools::get_db_address(2);
+    let addresses = tools::get_db_address("mixing_service");
 
     if response_normal.status().is_success() {
         let body = response_normal.text().await?;
