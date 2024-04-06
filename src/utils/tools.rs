@@ -90,13 +90,10 @@ pub fn write_addresses_db(address: String) {
     let file = File::open(json_file_path).expect("Failed to open file");
     let reader = BufReader::new(file);
 
-    // 解析JSON数据
     let mut data: AddressData = serde_json::from_reader(reader).expect("Failed to parse JSON");
 
-    // 将字符串 "123" 添加到 potential_hacker 字段的数组中
     data.eth.potential_hacker.push(address);
 
-    // 写回JSON文件
     let new_file = OpenOptions::new()
         .write(true)
         .truncate(true)
@@ -104,7 +101,6 @@ pub fn write_addresses_db(address: String) {
         .expect("Failed to open file for writing");
     let mut writer = BufWriter::new(new_file);
 
-    // 将更新后的数据写回文件
     serde_json::to_writer_pretty(&mut writer, &data).expect("Failed to write JSON to file");
 }
 
