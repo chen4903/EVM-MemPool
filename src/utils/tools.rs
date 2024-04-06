@@ -11,12 +11,14 @@ use serde::{Deserialize, Serialize};
 use lettre::{transport::smtp::authentication::Credentials, Message, SmtpTransport, Transport};
 use std::error::Error;
 
+/// @dev：Used to parse the data For addresses.json
 #[derive(Debug, Serialize, Deserialize)]
 struct AddressData {
     eth: Data,
     bsc: Data
 }
 
+/// @dev：Used to parse the data For addresses.json
 #[derive(Debug, Serialize, Deserialize)]
 struct Data {
     hacker: Vec<String>,
@@ -25,7 +27,9 @@ struct Data {
     potential_hacker: Vec<String>
 }
 
-// 我们目前只做ETH链
+/// @notice We currently only focus on Ethereum
+/// @dev Get the address from db(a json file)
+/// @param option: "hacker", "protocol", "mixing_service" or "potential_hacker", the other returns a new vector
 pub fn get_db_address(option: &str) -> Vec<String>{
     let file = File::open("src/utils/addresses.json").expect("Failed to open file");
     let reader = BufReader::new(file);
@@ -36,7 +40,7 @@ pub fn get_db_address(option: &str) -> Vec<String>{
         return json_data.eth.hacker;
     }else if option == "protocol" {
         return json_data.eth.protocol;
-    } else if option == "mixing_service"{
+    } else if option == "mixing_service" {
         return json_data.eth.mixing_service;
     } else if option == "potential_hacker" {
         return json_data.eth.potential_hacker;
@@ -45,6 +49,13 @@ pub fn get_db_address(option: &str) -> Vec<String>{
     }
 }
 
+/// @dev Send an email
+/// @param sender Email from
+/// @param receiver The email address to receive
+/// @param title The email title
+/// @param content The email content
+/// @param password Sender's email server password
+/// @param smtp_server Email server smtp code
 pub fn send_email(
     sender: String,
     receiver: String,
@@ -60,13 +71,9 @@ pub fn send_email(
         .subject(title)
         .body(content)?;
 
-    let smtp_server = smtp_server.as_str(); // 根据邮件服务商而定
-    let smtp_username = sender; // 发件邮箱
-    let smtp_password = password; // 授权码
+    let creds = Credentials::new(sender, password);
 
-    let creds = Credentials::new(smtp_username.to_string(), smtp_password.to_string());
-
-    let mailer = SmtpTransport::relay(smtp_server)?
+    let mailer = SmtpTransport::relay(smtp_server.as_str())?
         .credentials(creds)
         .build();
 
@@ -101,13 +108,13 @@ pub fn write_addresses_db(address: String) {
     serde_json::to_writer_pretty(&mut writer, &data).expect("Failed to write JSON to file");
 }
 
-/// @dev：
-///     TODO：这种分页的合约尚未完成，拉下来需要进一步分开：https://etherscan.io/address/0x80d69e79258FE9D056c822461c4eb0B4ca8802E2#code
-///           像这种单页的可以正常拉取下来：0xB20bd5D04BE54f870D5C0d3cA85d82b34B836405
-///     获取某个已经verify的合约的solidity源码，默认输出到项目根路径下的output文件夹
-/// @param：
-///     api_key：区块链浏览器的API接口，ETHERSCAN_API_KEY
-///     address：你要查询的地址
+/// @notice This function is not complete yet
+/// @dev Obtain the solidity source code of a verified contract and output it to the output folder
+/// @param api_key ETHERSCAN API KEY
+/// @param address Which contract address' sourcecode you want to get 
+/// @TODO A single page like this can be pulled down normally: 0xB20bd5D04BE54f870D5C0d3cA85d82b34B836405.
+///       But this type of paginated contract is not yet completed and needs to be further separated when 
+///       pulled down: https://etherscan.io/address/0x80d69e79258FE9D056c822461c4eb0B4ca8802E2#code
 pub async fn get_contract_solidity_code(
     api_key: String,
     address: &str,
@@ -146,9 +153,12 @@ pub async fn get_contract_solidity_code(
     Ok(())
 }
 
+/// @dev Write a file
+/// @param file_name File name
+/// @param output The output path
 fn write_file(file_name: String, output: String) {
     let output_dir = "./output";
-    // 创建文件夹
+    // Create a new file
     match fs::metadata(output_dir) {
         Ok(metadata) => {
             if metadata.is_dir() {
@@ -168,7 +178,7 @@ fn write_file(file_name: String, output: String) {
         }
     }
 
-    // 写入文件
+    // write file
     let path = format!("./output/{}.sol", file_name);
     let mut file = match File::create(path) {
         Ok(file) => file,
@@ -178,7 +188,6 @@ fn write_file(file_name: String, output: String) {
         }
     };
 
-    // 换行
     match file.write_all(output.replace("\r\n", "\n").as_bytes()) {
         Ok(_) => {},
         Err(e) => eprintln!("write file errer: {}", e),

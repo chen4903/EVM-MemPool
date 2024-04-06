@@ -1,19 +1,20 @@
 use std::io::{stdin, stdout, Write};
 use colored::*;
 use dotenv::dotenv;
-
 use openai::{
     chat::{ChatCompletion, ChatCompletionMessage, ChatCompletionMessageRole},
     set_base_url, set_key,
 };
 
-struct AI {
+pub struct AI {
     pub OPENAI_KEY: String,
     pub OPENAI_BASE_URL: String,
 }
 
 impl AI {
-    // 实现关联函数new，用于创建AI实例
+    
+    /// @param openai_key OpenAI API KEY
+    /// @param openai_base_url A domestic(For china) proxy springboard for accessing OpenAI
     pub fn new(openai_key: String, openai_base_url: String) -> Self {
         AI {
             OPENAI_KEY: openai_key,
@@ -21,8 +22,8 @@ impl AI {
         }
     }
 
+    /// @dev Create a chatgpt client
     pub async fn chatgpt(&self) {
-        // Make sure you have a file named `.env` with the `OPENAI_KEY` environment variable defined!
         dotenv().ok();
         set_key(self.OPENAI_KEY.clone());
         set_base_url(self.OPENAI_BASE_URL.clone());

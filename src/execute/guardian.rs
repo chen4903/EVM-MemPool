@@ -7,19 +7,24 @@ use ethers::{
 use eyre::Result;
 use std::sync::Arc;
 
-struct Message_Robot {
-    pub api_key: String,
-    pub WSS: String,
-    pub sender: String, // 哪个邮件作为服务器发邮件
-    password: String,
-    smtp_server: String
+pub struct Message_Robot {
+    API_KEY: String,
+    WSS: String,
+    sender: String, // Email from
+    password: String, // Sender's email server password
+    smtp_server: String // Email server smtp code
 }
 
 impl Message_Robot {
-    // 关联函数，用于创建新的Message_Robot实例
+
+    /// @param api_key Etherscan API kEY
+    /// @param wss WSS URL
+    /// @param sender Email from
+    /// @param password Sender's email server password
+    /// @smtp_server Email server smtp code
     pub fn new(api_key: String, wss: String, sender: String, password: String, smtp_server: String) -> Self {
         Message_Robot {
-            api_key,
+            API_KEY: api_key,
             WSS: wss,
             sender,
             password,
@@ -27,10 +32,13 @@ impl Message_Robot {
         }
     }
 
+    /// @dev Create a robot to monitor the address m, and send email to receiver when the m has action
+    /// @param address Who to monitor
+    /// @param receiver Which email address to receive
     pub async fn message_robot(
         &self,
-        address: String, // 你要监听谁
-        receiver: String, // 哪个邮件来接收
+        address: String, 
+        receiver: String, 
     ) -> Result<()> {
         let client =
         Provider::<Ws>::connect(self.WSS.clone()).await?;
@@ -43,7 +51,9 @@ impl Message_Robot {
         while let Some(log) = stream.next().await {
             println!("block height: {:?}", log.number);
             let height= *(log.number.unwrap().0.get(0).unwrap());
-            let txs = fetcher::fetch_address_all_txs(self.api_key.clone(), address.as_str(), height, height).await;
+
+            let fetcher = fetcher::Fetch::new(self.API_KEY.clone());
+            let txs = fetcher.fetch_address_all_txs( address.as_str(), height, height).await;
     
             if txs.unwrap().len() > 0 {
                 let content = format!{"Attention! The {} you monitor has action", address};
