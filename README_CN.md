@@ -13,14 +13,9 @@
   - [x] 收集主流合约的地址：比如AAVE、Compound、1Inch等
   - [x] 收集黑客地址
   - [x] 发邮件给用户
-- [ ] 监控混币器发送给用户的地址，这些地址可能是将来用来发起攻击、部署钓鱼合约的地址
-  - [ ] 将获取到的地址存放到`addressses._details.json`文件的`potential_hacker`字段
-
+- [x] 监控混币器发送给用户的地址，这些地址可能是将来用来发起攻击、部署钓鱼合约的地址
+  - [x] 将获取到的地址存放到`addressses._details.json`文件的`potential_hacker`字段
 - [x] 接入ChatGPT的API，用户可以询问来获取相关的安全建议
-- [ ] 监控是否有黑客在给地址投毒
-  - [ ] 订阅USDT的转账交易
-  - [ ] 如果是转账0U，则是地址投毒
-  - [ ] 记录下黑客的地址和被投毒的地址到utils文件夹下面的`addresses_poisoning.json`文件中
 
 ## Usage
 
@@ -34,6 +29,7 @@
 - `fetch_address_normal_txs()`：获得某个地址的普通交易
 - `fetch_address_internal_txs()`：获得某个地址的内部交易
 - `is_invoke_mixing_service()`：查询某个地址是否有相关混币器交易
+- `monitor_mixing_service()`：监控存钱进混币器的用户，记录下来，他们可能是未来的黑客
 
 ### utils
 

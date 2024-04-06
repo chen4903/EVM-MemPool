@@ -8,11 +8,11 @@ use crate::utils::tools;
 ///     用于解析ETHERSCAN返回的数据
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TransactionInfo {
-    hash: String,
-    from: String,
-    to: String,
-    value: String,
-    input: String
+    pub hash: String,
+    pub from: String,
+    pub to: String,
+    pub value: String,
+    pub input: String
 }
 
 /// @dev：

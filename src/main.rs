@@ -77,5 +77,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //     smtp_server
     // ).await?;
     
+    // 记录存钱进混币器的地址
+    listener::listen::monitor_mixing_service(api_key, wss_url, ).await?;
+
     Ok(())
 }
