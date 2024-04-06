@@ -1,6 +1,6 @@
 # SecHelper
 
-We have [Chinese Version](https: //github.com/chen4903/SecHelper/blob/master/README_CN.md).
+We have [Chinese Version](https://github.com/chen4903/SecHelper/blob/master/README_CN.md).
 
 ## Brief
 
