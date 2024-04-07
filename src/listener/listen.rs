@@ -6,7 +6,6 @@ use ethers::{
     providers::{Middleware, Provider, StreamExt, Ws},
 };
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 use eyre::Result;
 use crate::listener::fetcher;
 use crate::utils::tools;
@@ -27,7 +26,7 @@ struct Data {
     potential_hacker: Vec<String>
 }
 
-struct Listen {
+pub struct Listen {
     pub WSS: String,
     pub API_Key: String,
 }
@@ -45,30 +44,31 @@ impl Listen {
 
     /// @dev Monitor a certain address if it has ERC20 transfer tx
     /// @param address The address to monitor
-    pub async fn subscribe_erc20_transfer(&self, address: String) -> Result<()> {
+    /// @param event The event signature. E.g. `Transfer(address,address,uint256)`
+    pub async fn subscribe_event(&self, address: String, event: &str) -> Result<()> {
         let client =
         Provider::<Ws>::connect(self.WSS.clone()).await?;
-        let client = Arc::new(client);
     
         let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
         println!("last_block: {last_block}");
     
-        let erc20_transfer_filter =
+        let event_filter =
             Filter::new()
                 .to_block(last_block + 999999999) // To which block, we just plus 999999999 because we assume that the program will not run continuously for such a long time
-                .event("Transfer(address,address,uint256)") 
+                .event(event) 
                 .address(address.parse::<Address>().unwrap()); // The address we monitor
     
-        let mut stream = client.subscribe_logs(&erc20_transfer_filter).await?;
+        let mut stream = client.subscribe_logs(&event_filter).await?;
     
         while let Some(log) = stream.next().await {
             println!(
-                "block: {:?}, tx: {:?}, token: {:?}, from: {:?}, to: {:?}, amount: {:?}",
+                "block: {:?}, tx: {:?}, adddress: {:?}, topic1: {:?}, topic2: {:?}, topic3: {:?}, data: {:?}",
                 log.block_number,
                 log.transaction_hash,
                 log.address,
-                Address::from(log.topics[1]),
-                Address::from(log.topics[2]),
+                U256::decode(log.topics[1]),
+                U256::decode(log.topics[2]),
+                U256::decode(log.topics[3]),
                 U256::decode(log.data)
             );
         }
@@ -80,7 +80,6 @@ impl Listen {
     /// @param address The address to subscribe
     pub async fn subscribe_address(&self, address: String) -> Result<()> {
         let client = Provider::<Ws>::connect(self.WSS.clone()).await?;
-        let client = Arc::new(client);
     
         let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
     
@@ -103,7 +102,6 @@ impl Listen {
         let mixing_services = tools::get_db_address("mixing_service");
     
         let client = Provider::<Ws>::connect(self.WSS.clone()).await?;
-        let client = Arc::new(client);
     
         let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
     

@@ -10,15 +10,17 @@ use reqwest::get;
 use serde::{Deserialize, Serialize};
 use lettre::{transport::smtp::authentication::Credentials, Message, SmtpTransport, Transport};
 use std::error::Error;
+use ethers::utils::keccak256;
+use ethers::utils::hex;
 
-/// @dev：Used to parse the data For addresses.json
+/// @dev Used to parse the data For addresses.json
 #[derive(Debug, Serialize, Deserialize)]
 struct AddressData {
     eth: Data,
     bsc: Data
 }
 
-/// @dev：Used to parse the data For addresses.json
+/// @dev Used to parse the data For addresses.json
 #[derive(Debug, Serialize, Deserialize)]
 struct Data {
     hacker: Vec<String>,
@@ -26,6 +28,20 @@ struct Data {
     mixing_service: Vec<String>,
     potential_hacker: Vec<String>
 }
+
+/// @dev Used to parse the data For addresses.json
+/// @param functionName The function you call. E.g. `transfer(address,uint256)`
+pub fn function_sig(functionName: &str) -> String {
+    let data = functionName.as_bytes();
+    let hash = keccak256(data);
+    let hash = hex::encode(&hash);
+
+    let first_four_bytes = &hash.as_bytes()[..8];
+    let result_string = std::str::from_utf8(first_four_bytes).unwrap();
+
+    return format!("0x{}", result_string.to_string());
+}
+
 
 /// @notice We currently only focus on Ethereum
 /// @dev Get the address from db(a json file)
@@ -85,6 +101,8 @@ pub fn send_email(
     Ok(())
 }
 
+/// @dev Write an address to addresses.json
+/// @param address The address to write
 pub fn write_addresses_db(address: String) {
     let json_file_path = Path::new("src/utils/addresses.json");
     let file = File::open(json_file_path).expect("Failed to open file");

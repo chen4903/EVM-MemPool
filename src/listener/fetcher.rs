@@ -11,7 +11,8 @@ pub struct TransactionInfo {
     pub from: String,
     pub to: String,
     pub value: String,
-    pub input: String
+    pub input: String,
+    pub methodId: String
 }
 
 pub struct Fetch {
@@ -66,6 +67,7 @@ impl Fetch {
                     let to = transaction["to"].as_str().unwrap().to_string();
                     let value = transaction["value"].as_str().unwrap().to_string();
                     let input = transaction["input"].as_str().unwrap().to_string();
+                    let methodId = transaction["methodId"].as_str().unwrap().to_string();
 
                     let transaction_info = TransactionInfo {
                         hash,
@@ -73,6 +75,7 @@ impl Fetch {
                         to,
                         value,
                         input,
+                        methodId
                     };
 
                     println!("{:?}", transaction_info);
@@ -101,6 +104,7 @@ impl Fetch {
                     let to = transaction["to"].as_str().unwrap().to_string();
                     let value = transaction["value"].as_str().unwrap().to_string();
                     let input = transaction["input"].as_str().unwrap().to_string();
+                    let methodId = transaction["methodId"].as_str().unwrap().to_string();
 
                     let transaction_info = TransactionInfo {
                         hash,
@@ -108,6 +112,7 @@ impl Fetch {
                         to,
                         value,
                         input,
+                        methodId
                     };
 
                     println!("{:?}", transaction_info);
@@ -242,6 +247,7 @@ impl Fetch {
                     let to = transaction["to"].as_str().unwrap().to_string();
                     let value = transaction["value"].as_str().unwrap().to_string();
                     let input = transaction["input"].as_str().unwrap().to_string();
+                    let methodId = transaction["methodId"].as_str().unwrap().to_string();
 
                     let transaction_info = TransactionInfo {
                         hash,
@@ -249,6 +255,7 @@ impl Fetch {
                         to,
                         value,
                         input,
+                        methodId
                     };
 
                     println!("{:?}", transaction_info);
@@ -303,6 +310,7 @@ impl Fetch {
                     let to = transaction["to"].as_str().unwrap().to_string();
                     let value = transaction["value"].as_str().unwrap().to_string();
                     let input = transaction["input"].as_str().unwrap().to_string();
+                    let methodId = transaction["methodId"].as_str().unwrap().to_string();
 
                     let transaction_info = TransactionInfo {
                         hash,
@@ -310,6 +318,7 @@ impl Fetch {
                         to,
                         value,
                         input,
+                        methodId
                     };
 
                     println!("{:?}", transaction_info);

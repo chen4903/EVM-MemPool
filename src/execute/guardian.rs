@@ -4,8 +4,11 @@ use ethers::{
     core::types::BlockNumber,
     providers::{Middleware, Provider, StreamExt, Ws},
 };
-use eyre::Result;
-use std::sync::Arc;
+use eyre::{Ok, Result};
+use std::{
+    thread,
+    time::Duration
+};
 
 pub struct Message_Robot {
     API_KEY: String,
@@ -40,9 +43,9 @@ impl Message_Robot {
         address: String, 
         receiver: String, 
     ) -> Result<()> {
+        println!("Robot starts to monitor...");
         let client =
         Provider::<Ws>::connect(self.WSS.clone()).await?;
-        let client = Arc::new(client);
     
         let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
     
@@ -54,14 +57,54 @@ impl Message_Robot {
 
             let fetcher = fetcher::Fetch::new(self.API_KEY.clone());
             let txs = fetcher.fetch_address_all_txs( address.as_str(), height, height).await;
-    
-            if txs.unwrap().len() > 0 {
-                let content = format!{"Attention! The {} you monitor has action", address};
+
+            let mut hash = Vec::new();
+            for tx in txs.unwrap() {
+                hash.push(tx.hash);
+            }
+
+            if hash.len() > 0 {
+                let content = format!{"Attention! The {} you monitor has action! \nTx hash{:?}", address, hash};
 
                 tools::send_email(self.sender.clone(), receiver.clone(), String::from("SecHelper Robot"), content, self.password.clone(), self.smtp_server.clone()).unwrap();
             }
         }
     
         Ok(())
+    }
+
+    /// @dev Create a robot to monitor the address m, and send email to receiver when the m has too many certain tx. 
+    /// Check each 30 seconds and the newest 240 blocks. 
+    /// @notice 240 blocks ~= 3600 seconds ~= one hour
+    /// @param address Who to monitor
+    /// @param event The function you call. E.g. `transfer(address,uint256)`
+    /// @param receiver Which email address to receive
+    /// @param limit The max number of certain txs, rebot will send email as long as the txs number over your limit
+    pub async fn warning_robot(&self, address: &str, event: &str, receiver: String, limit: u32) -> Result<()> {
+        println!("Robot starts to monitor...");
+        let client = Provider::<Ws>::connect(self.WSS.clone()).await?;
+
+        loop {
+            let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
+            let fetcher = fetcher::Fetch::new(self.API_KEY.clone());
+
+            let txs = fetcher.fetch_address_all_txs(address, last_block.as_u64() - 240, last_block.as_u64()).await;
+
+            let mut count = 0;
+            for tx in txs.unwrap() {
+                if tx.methodId == tools::function_sig(event) {
+                    count = count + 1;
+                }
+            }
+
+            if count > limit {
+                let content = format!{"Warning! The {} you monitor may be in dangerous! \nResult: Too many `{}` txs, which over your limit({})", address, event, limit};
+
+                tools::send_email(self.sender.clone(), receiver.clone(), String::from("SecHelper Robot"), content, self.password.clone(), self.smtp_server.clone()).unwrap();
+            }
+
+            thread::sleep(Duration::from_secs(30));
+        }
+
     }
 }

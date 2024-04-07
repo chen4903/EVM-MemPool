@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let openai_key = env::var("OPENAI_KEY").expect("Init the .env file first");
     let receiver = env::var("RECEIVER").expect("Init the .env file first");
     let password = env::var("PASSWORD").expect("Init the .env file first");
-    let smtp_sever = env::var("SMTP_SEVER").expect("Init the .env file first");
+    let smtp_server = env::var("SMTP_SEVER").expect("Init the .env file first");
 
     Ok(())
 }

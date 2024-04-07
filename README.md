@@ -17,9 +17,10 @@ Rust
 - [x] Monitor the interaction of a certain contract, and send an email to notify the user if there is hacker interaction (confirmed transaction).
 - [x] Monitor the mixing service address and record the user addresses it interacts with, which may be the addresses of hackers who are about to launch an attack.
 - [x] Access ChatGPT API, users can inquire to obtain relevant security advice.
-- [ ] Monitor for any abnormal transactions in a certain contract and notify users via email
-  - [ ] Pool：If the latest 30 transactions all involve removing liquidity;
+- [x] Monitor for any abnormal transactions in a certain contract and notify users via email
+  - [x] Pool：If the latest 30 transactions all involve removing liquidity;
   - [ ] TODO
+- [ ] 
 
 ## Usage
 
@@ -30,6 +31,7 @@ Rust
 guardian
 
 - `message_robot()`: Create a robot to monitor the address m, and send email to receiver when the m has action.
+- `warning_robot()`: Create a robot to monitor the address m, and send email to receiver when the m has too many certain tx. Check each 30 seconds and the newest 240 blocks. 
 
 ### listener
 
@@ -44,7 +46,7 @@ listen
 
 - `monitor_mixing_service()`: Monitor mixing service, record the users who interact with it.
 - `subscribe_address()`: Subscribe a certain address's all new txs.
-- `subscribe_erc20_transfer()`: Monitor a certain address if it has ERC20 transfer tx
+- `subscribe_event()`: Monitor a certain address if it has a certain action
 
 ### utils
 
@@ -52,6 +54,7 @@ tools
 
 - `get_contract_solidity_code()`: Obtain the solidity source code of a verified contract and output it to the output folder. (Not complete).
 - `send_email()`: Send an email.
+- `function_sig()`: Get a function's signature
 
 ### ai
 
