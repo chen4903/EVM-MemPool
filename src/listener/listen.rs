@@ -66,9 +66,9 @@ impl Listen {
                 log.block_number,
                 log.transaction_hash,
                 log.address,
+                U256::decode(log.topics[0]),
                 U256::decode(log.topics[1]),
                 U256::decode(log.topics[2]),
-                U256::decode(log.topics[3]),
                 U256::decode(log.data)
             );
         }
@@ -90,7 +90,11 @@ impl Listen {
             let height= *(log.number.unwrap().0.get(0).unwrap());
 
             let fetcher = fetcher::Fetch::new(self.API_Key.clone());
-            let _ = fetcher.fetch_address_all_txs( address.as_str(), height, height).await;
+            let txs = fetcher.fetch_address_all_txs( address.as_str(), height, height).await;
+
+            for tx in txs.unwrap() {
+                println!("{:?}", tx);
+            }
         }
     
         Ok(())
@@ -98,6 +102,7 @@ impl Listen {
     
     /// @dev Monitor mixing service, record the users who interact with it
     pub async fn monitor_mixing_service(&self) -> Result<()> {
+        println!("Start monitor mixing service");
 
         let mixing_services = tools::get_db_address("mixing_service");
     

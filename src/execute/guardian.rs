@@ -10,7 +10,7 @@ use std::{
     time::Duration
 };
 
-pub struct Message_Robot {
+pub struct MessageRobot {
     API_KEY: String,
     WSS: String,
     sender: String, // Email from
@@ -18,7 +18,7 @@ pub struct Message_Robot {
     smtp_server: String // Email server smtp code
 }
 
-impl Message_Robot {
+impl MessageRobot{
 
     /// @param api_key Etherscan API kEY
     /// @param wss WSS URL
@@ -26,7 +26,7 @@ impl Message_Robot {
     /// @param password Sender's email server password
     /// @smtp_server Email server smtp code
     pub fn new(api_key: String, wss: String, sender: String, password: String, smtp_server: String) -> Self {
-        Message_Robot {
+        MessageRobot {
             API_KEY: api_key,
             WSS: wss,
             sender,
@@ -77,7 +77,7 @@ impl Message_Robot {
     /// Check each 30 seconds and the newest 240 blocks. 
     /// @notice 240 blocks ~= 3600 seconds ~= one hour
     /// @param address Who to monitor
-    /// @param event The function you call. E.g. `transfer(address,uint256)`
+    /// @param event The function you call. E.g. `removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)`
     /// @param receiver Which email address to receive
     /// @param limit The max number of certain txs, rebot will send email as long as the txs number over your limit
     pub async fn warning_robot(&self, address: &str, event: &str, receiver: String, limit: u32) -> Result<()> {
