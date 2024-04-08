@@ -153,9 +153,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Cli::Guardian { key, wss, sender, password, smtp_server, address, receiver, call, limit, message_robot, warning_robot} => {
             let guardian = execute::guardian::MessageRobot::new(key, wss, sender, password, smtp_server);
 
-            if message_robot == true { // warning_robot
+            if warning_robot == true { // warning_robot
                 guardian.warning_robot(address.as_str(), call.as_str(), receiver, limit).await?;
-            } else if warning_robot == true{ // message_robot
+            } else if message_robot == true{ // message_robot
                 guardian.message_robot(address, receiver).await?;
             } else {
 
